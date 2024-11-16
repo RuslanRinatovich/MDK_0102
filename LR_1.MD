@@ -36,14 +36,14 @@
 
 1. Запустите IntelliJ IDEA.
 2. Выберите слева вкладку **Projects**  и нажмите на кнопку **New Project**.
-   ![img.png](Lesson2Images/img0.png)
-3. В появившемся окне выберите тип приложения JavaFX. Дайте имя проекту **trade-app**.
-   Language - **Java**, Build system - **Maven**,  Group - **ru.demo**. В качестве JDK используйте Amazon Coretto 22. Нажмите **Next**.
-   ![img.png](Lesson2Images/img00.png)
-4. В следующем окне ничего не выбираем и нажимаем **Create**.
-   ![img.png](Lesson2Images/img.png)
-5. Если все настройки пройдены успещно появится окно с вашим проектом.
-   ![img_1.png](Lesson2Images/img_1.png)
+![img.png](img.png)
+
+3. Дайте имя проекту **debug-app**.
+   Language - **Java**, Build system - **IntelliJ**. 
+   В качестве JDK используйте Amazon Coretto 22. Нажмите **Create**.
+   ![img_1.png](img_1.png)
+4. Если все настройки пройдены успешно появится окно с вашим проектом.
+   ![img_2.png](img_2.png)
 6. Откройте файл **HelloApplication.java**. Нажмите правой кнопкой мыши в любом месте программного кода и выберите в контекстном меню пункт Run HelloApplication.main()
    ![img_2.png](Lesson2Images/img_2.png)
 7. После этого запустится форма с одной кнопкой.
