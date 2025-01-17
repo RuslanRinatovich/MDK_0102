@@ -438,6 +438,7 @@ public class DiscountCalculatorTest {
 
 ![img_30.png](L11/img_30.png)
 
+> ### **Сделайте снимок экрана 1 - Созданный пример по уроку**
 
 </details>
 
@@ -611,7 +612,7 @@ public class BooleanTest {
 
 public class IvanovIvanLab2 {
 
-     public String CheckNumberX(double x)
+     public String checkNumberX(double x)
         {
             if (x >= -5 && x < 1)
                 return "принадлежит";
@@ -649,7 +650,7 @@ public class IvanovIvanLab2Test {
         String expected = "не принадлежит";
 
         // Исполнение
-        int result = ivanovIvanLab2.checkNumberX(x);
+        String result = ivanovIvanLab2.checkNumberX(x);
 
         // Проверка
         Assertions.assertEquals(expected, result);
@@ -658,6 +659,10 @@ public class IvanovIvanLab2Test {
           
 ```
 6. Выполните тесты. 
+
+![img_1.png](img_1.png)
+
+> ### **Сделайте нимок экрана 2 - Проверка тестовых методов класса IvanovIvanLab2Test.**
 
 7. Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР2](LR2_Report.docx) и ответить на вопросы.
 

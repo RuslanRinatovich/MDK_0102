@@ -1383,7 +1383,7 @@ public class IvanovIvanLab2Test {
         String expected = "не принадлежит";
 
         // Исполнение
-        int result = ivanovIvanLab2.checkNumberX(x);
+        String result = ivanovIvanLab2.checkNumberX(x);
 
         // Проверка
         Assertions.assertEquals(expected, result);
@@ -1393,7 +1393,9 @@ public class IvanovIvanLab2Test {
 ```
 6. Выполните тесты. 
 
-7. Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР2](LR2_Report.docx) и ответить на вопросы.
+
+
+7. Оформите индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР2](LR2_Report.docx).
 
 </details>
 
