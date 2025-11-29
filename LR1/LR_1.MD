@@ -35,7 +35,7 @@
    * Сохраните неправильную программу под именем `WrongProgram.java`.
    * Сохраните правильную программу под именем `RightProgram.java`.
    * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР1](LR1_Report.docx)
-   * загрузить все в гугл форму:[235 группа](https://forms.gle/A8uae2c7ebTUH4fA6) или [237 группа](https://forms.gle/xZioXLRf2bn6ymES9)
+   * загрузить все в гугл форму:[245 группа](https://forms.gle/TWB6hLeyrMKL7Y6N7) или [247 группа](https://forms.gle/nWHCojYTyY58Ljj39)
 
 * Оценка 4
     * Сделать [пример](#создание-проекта) и сохранить его под именем `Example.java`.
@@ -43,14 +43,14 @@
     * Сохраните неправильную программу под именем `WrongProgram.java`.
     * Сохраните правильную программу под именем `RightProgram.java`.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР1](LR1_Report.docx)
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/A8uae2c7ebTUH4fA6) или [237 группа](https://forms.gle/xZioXLRf2bn6ymES9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/TWB6hLeyrMKL7Y6N7) или [247 группа](https://forms.gle/nWHCojYTyY58Ljj39)
 
 * Оценка 3
     * Сделать [пример](#создание-проекта) и сохранить его под именем `Example.java`.
     * Выполнить первые два пункта задания вашего варианта [задание по вариантам](LAB1_Variants.docx).
     * Сохраните неправильную программу под именем `WrongProgram.java`.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР1](LR1_Report.docx)
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/A8uae2c7ebTUH4fA6) или [237 группа](https://forms.gle/xZioXLRf2bn6ymES9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/TWB6hLeyrMKL7Y6N7) или [247 группа](https://forms.gle/nWHCojYTyY58Ljj39)
 
 
 ## Создание проекта
