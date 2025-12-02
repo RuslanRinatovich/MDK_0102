@@ -12,8 +12,8 @@
 2. В индивидуальном отчёте должны быть указаны цель, [задание](LAB1_Variants.docx), номер варианта(ваш порядковый номер
    в списке группы в
    журнале на моем
-   сайте [235 группа](https://docs.google.com/spreadsheets/d/186VmfxhiyN9vD0eqQtgej3up6OricDa0/edit?gid=2072898038#gid=2072898038),
-   [237 группа](https://docs.google.com/spreadsheets/d/1HBRhJ0W6VezDNjnPWNHxUv7krdP6HPgP/edit?gid=1461174089#gid=1461174089)),
+   сайте [245 группа](https://docs.google.com/spreadsheets/d/186VmfxhiyN9vD0eqQtgej3up6OricDa0/edit?gid=2072898038#gid=2072898038),
+   [247 группа](https://docs.google.com/spreadsheets/d/1HBRhJ0W6VezDNjnPWNHxUv7krdP6HPgP/edit?gid=1461174089#gid=1461174089)),
    представлены необходимый программный код и пояснения к ним.
 
 ***Критерии оценивания***
@@ -23,22 +23,22 @@
       отчет.
     * Выполните [задание](#задание) согласно вашему варианту.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР2](LR2_Report.docx) и ответить на вопросы.
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/rsQvqzeLBAh8pWQa7)
-      или [237 группа](https://forms.gle/xZioXLRf2bn6ymES9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/CwP2LfSeegZoPmET6)
+      или [247 группа](https://forms.gle/wUavoK5tnvvmshCZ6)
 
 * Оценка 4
     * Сделать [Пример проекта с подключением JUnit](#пример-проекта-с-подключением-junit) и и добавьте скриншоты в
       отчет.
     * Выполните [задание](#задание) согласно вашему варианту.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР2](LR2_Report.docx) без ответов на вопросы.
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/rsQvqzeLBAh8pWQa7)
-      или [237 группа](https://forms.gle/xZioXLRf2bn6ymES9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/CwP2LfSeegZoPmET6)
+      или [247 группа](https://forms.gle/wUavoK5tnvvmshCZ6)
 
 * Оценка 3
     * Сделать [Пример проекта с подключением JUnit](#пример-проекта-с-подключением-junit) и добавьте скриншоты в отчет.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР2](LR2_Report.docx).
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/rsQvqzeLBAh8pWQa7)
-      или [237 группа](https://forms.gle/xZioXLRf2bn6ymES9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/CwP2LfSeegZoPmET6)
+      или [247 группа](https://forms.gle/wUavoK5tnvvmshCZ6)
 
 # Оглавление
 
