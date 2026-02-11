@@ -481,143 +481,54 @@ public class DiscountCalculatorTest {
 
 [Оглавление](#оглавление)
 
-JUnit, как и многие другие библиотеки, предоставляет множество инструментов для упрощения стандартных операций. В этом
-уроке вы изучите основные методы фреймворка, которые позволяют программисту не только быстро проверять свои программы,
-но и легко ориентироваться в тестах, написанных другими разработчиками.
+Вот структурированная информация о методах JUnit для тестирования:
 
-## Метод assertEquals(...)
+## **Основные методы тестирования в JUnit**
 
-Метод `assertEquals(...)`
-Ещё один элемент `JUnit` — это множество статических методов класса `Assertions`.
-Один из них, `assertEquals(Object expected, Object actual, [String message])` вы уже встречали его выше примерах.
-Он принимает 2 или 3 аргумента. Первый — это ожидаемый результат, второй — фактический. Третий аргумент —
-необязательная строка, которая выведется, если фактический результат не равен ожидаемому, другими словами, если тест
-обнаружит ошибку.
+| Метод | Что делает? | Пример использования | Особенности |
+|-------|-------------|---------------------|-------------|
+| **`assertEquals(Object expected, Object actual, [String message])`** | Проверяет, что два значения равны | `assertEquals(5, result)`<br>`assertEquals("text", actual, "Сообщение об ошибке")` | • Сравнивает через `equals()`<br>• Необязательный 3-й аргумент - сообщение при падении теста |
+| **`assertNull(Object object)`** | Проверяет, что значение равно `null` | `assertNull(nullString)` | • Специализированный метод для проверки на null |
+| **`assertNotNull(Object object)`** | Проверяет, что значение НЕ равно `null` | `assertNotNull("apple")` | • Удобнее, чем `assertNotEquals(null, value)` |
+| **`assertTrue(boolean condition)`** | Проверяет, что условие истинно | `assertTrue(value)` | • Заменяет `assertEquals(true, value)`<br>• Читаемее и понятнее |
+| **`assertFalse(boolean condition)`** | Проверяет, что условие ложно | `assertFalse(value)` | • Заменяет `assertEquals(false, value)` |
+| **`assertArrayEquals(array1, array2)`** | Проверяет равенство массивов поэлементно | `assertArrayEquals(expectedArray, actualArray)` | • Решает проблему сравнения массивов<br>• Массивы сравниваются по содержимому |
 
-## Методы `Assertions.assertNull(...)` и `Assertions.assertNotNull(...)`
+---
 
-Проверить, что значение переменной равно `null`, можно с помощью метода `assertEquals(Object object)`:
+### **Важные особенности:**
 
+#### **1. Импорт методов (рекомендуемый способ)**
 ```java
-@Test
-public void shouldBeNull() {
-    String nullString = null;
-    Assertions.assertEquals(null, nullString);
-}
-```
-
-А если нужно удостовериться, что значение не равно `null`,
-понадобится метод `assertNotEquals(Object object)`:
-
-```java
-@Test
-public void shouldNotBeNull() {
-    String apple = "apple";
-    Assertions.assertNotEquals(null, apple);
-}
-```
-
-Оба теста работают корректно.
-Но если проверку на null вам нужно выполнять часто,
-то писать каждый раз `Assertions.assertEquals(null, value)` будет излишеством.
-
-Лучше воспользоваться более удобными методами `Assertions.assertNull(Object object)`
-и `Assertions.assertNotNull(Object object)`.
-
-```java
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+// или выборочно:
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
-public class NullabilityTest {
-
-    @Test
-    public void shouldBeNull() {
-        String nullString = null;
-        assertNull(nullString);
-    }
-
-    @Test
-    public void shouldNotBeNull() {
-        String apple = "apple";
-        assertNotNull(apple);
-    }
-}
-
 ```
+**Преимущество:** Позволяет писать просто `assertEquals()` вместо `Assertions.assertEquals()`
 
-> Обратите внимание на использование `import static` в примере выше.
-> Методы класса `Assertions` часто импортируют как статические методы,
-> чтобы сократить запись. Это удобно, потому что в одном классе
-> может быть много тестов, и каждый из них будет вызывать какой-то
-> из методов проверки класса `Assertions`. В результате вместо такой записи:
+#### **2. Принцип работы `assertEquals()`**
+- Использует метод `equals()` класса `Object`
+- Требует корректной реализации `equals()` в тестируемых классах
+- **Для массивов не работает** - нужно использовать `assertArrayEquals()`
 
+#### **3. Сравнение массивов - особый случай**
 ```java
-Assertions.assertNull(firstString);
-Assertions.assertNotNull(secondString);
-Assertions.assertEquals(expected, actual);
+// НЕПРАВИЛЬНО (всегда false для массивов):
+assertEquals(expectedArray, actualArray); 
+
+// ПРАВИЛЬНО:
+assertArrayEquals(expectedArray, actualArray);
 ```
+Причина: `equals()` для массивов сравнивает ссылки, а не содержимое.
 
-Будет такая
+---
 
-```java
-*assertNull*(firstString);
-*assertNotNull*(secondString);
-*assertEquals*(expected, actual);
-```
-
-Вы также можете импортировать все методы сразу через
-
-```java
-  import static org.junit.jupiter.api.Assertions.*.
-```
-
-## Методы `assertTrue(...)` и `assertFalse(...)`
-
-Аналогичные методы существуют для проверки значений типа boolean.
-Вы можете использовать assertEquals(true, value)
-или assertEquals(false, value), но удобнее будет делать это с
-помощью специальных методов `assertTrue(value)` и `assertFalse(value).`
-
-```java
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public class BooleanTest {
-
-    @Test
-    public void shouldBeTrue() {
-        boolean value = true;
-        assertTrue(value);
-    }
-
-    @Test
-    public void shouldBeFalse() {
-        boolean value = false;
-        Assertions.assertFalse(value);
-    }
-}
-
-```
-
-> При сравнении значений через assertEquals() используется метод equals(..)
-> из класса Object. Поэтому для того, чтобы операция была выполнена корректно, в классах объектов этот метод должен быть
-> корректно переопределён.
-> В противном случае сравнение будет работать неправильно.
-
-> Есть ещё одна важная особенность, связанная с методом equals(..).
-> Его нельзя переопределить для массивов. Другими словами, два массива с одинаковым содержанием (одинаковыми элементами,
-> расположенными в том же порядке) — это разные объекты с точки зрения Java.
-> Поэтому метод equals(..) всегда будет возвращать false для таких массивов,
-> а тест с assertEquals(...) не будет проходить.
-
-
-> Для поэлементного сравнения массивов можно воспользоваться методом
-> Arrays.equals(...), а в JUnit можно использовать метод класса
-> `**Assertions — assertArrayEquals(...)**`.
+### **Правила использования:**
+1. **Специализированные методы предпочтительнее** (`assertNull` вместо `assertEquals(null, value)`)
+2. **Для булевых значений** используйте `assertTrue()`/`assertFalse()`
+3. **Для массивов** всегда используйте `assertArrayEquals()`
+4. **Для читаемости** добавляйте сообщения в 3-й параметр сложных проверок
 
 </details>
 
