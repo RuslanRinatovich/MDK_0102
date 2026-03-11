@@ -1,0 +1,1580 @@
+# Лабораторная работа №2_1: «Тестовое окружение и жизненный цикл тестов в JUnit» 🧪🔬
+
+---
+
+## 📋 Содержание
+
+1. [Цель работы](#-цель-работы)
+2. [Введение](#-введение)
+3. [Пример выполнения (Образец)](#-пример-выполнения-образец)
+4. [Варианты заданий](#-варианты-заданий)
+   - [Вариант 1 — Онлайн-корзина (ShoppingCart) 🛒](#вариант-1)
+   - [Вариант 2 — Светофор (TrafficLight) 🚦](#вариант-2)
+   - [Вариант 3 — Калькулятор (Calculator) 🧮](#вариант-3)
+   - [Вариант 4 — Оценка студента (StudentGrade) 🎓](#вариант-4)
+   - [Вариант 5 — Банковский счет (BankAccount) 🏦](#вариант-5)
+   - [Вариант 6 — Простой стек (SimpleStack) 📚](#вариант-6)
+   - [Вариант 7 — Игровой персонаж (Player) 🎮](#вариант-7)
+   - [Вариант 8 — Библиотечная книга (Book) 📖](#вариант-8)
+   - [Вариант 9 — Список дел (ToDoList) ✅](#вариант-9)
+   - [Вариант 10 — Термометр (Thermometer) 🌡️](#вариант-10)
+   - [Вариант 11 — Лифт (Elevator) 🛗](#вариант-11)
+   - [Вариант 12 — Торговый автомат (VendingMachine) 🥤](#вариант-12)
+   - [Вариант 13 — Часы (Clock) ⏰](#вариант-13)
+   - [Вариант 14 — Игральная кость (Dice) 🎲](#вариант-14)
+   - [Вариант 15 — Штраф за нарушение ПДД (TrafficTicket) 🚗](#вариант-15)
+   - [Вариант 16 — Онлайн-заказ (OnlineOrder) 📦](#вариант-16)
+   - [Вариант 17 — Склад (Warehouse) 🏭](#вариант-17)
+   - [Вариант 18 — Чат-комната (ChatRoom) 💬](#вариант-18)
+   - [Вариант 19 — Автомобиль (Car) 🚘](#вариант-19)
+   - [Вариант 20 — Геометрическая фигура (Circle) ⚪](#вариант-20)
+   - [Вариант 21 — Учетная запись пользователя (UserAccount) 👤](#вариант-21)
+   - [Вариант 22 — Простой счетчик (SimpleCounter) 🔢](#вариант-22)
+   - [Вариант 23 — Игра "Угадай число" (GuessTheNumber) 🔢❓](#вариант-23)
+   - [Вариант 24 — Валидатор пароля (PasswordValidator) 🔐](#вариант-24)
+   - [Вариант 25 — Электронное письмо (EmailMessage) ✉️](#вариант-25)
+   - [Вариант 26 — Парковка (ParkingLot) 🅿️](#вариант-26)
+   - [Вариант 27 — Бронирование билетов в кино (Cinema) 🎬](#вариант-27)
+   - [Вариант 28 — Зоопарк (Zoo) 🦁](#вариант-28)
+   - [Вариант 29 — Очередь в больнице (HospitalQueue) 🏥](#вариант-29)
+   - [Вариант 30 — Плейлист (MusicPlaylist) 🎵](#вариант-30)
+5. [Критерии оценки](#-критерии-оценки)
+6. [Инструкция по сдаче](#-инструкция-по-сдаче)
+
+---
+
+
+## 🎯 Цель работы
+
+Научиться использовать аннотации JUnit Jupiter (`@BeforeEach`, `@AfterEach`, `@BeforeAll`, `@AfterAll`) для создания изолированного тестового окружения и управления состоянием объектов перед выполнением тестов.
+
+---
+
+## 📚 Введение
+
+В этой работе мы продолжим изучать тестирование. Вы уже знаете, как писать простые тесты с проверками (`Assertions`). Но часто бывает так, что перед каждым тестом нужно создавать новые объекты (как новых бойцов перед боем 🥊), а после теста — например, закрывать файлы или очищать данные. 🧹
+
+Для этого в JUnit есть специальные методы, которые помечаются аннотациями:
+
+| Аннотация | Описание | Когда использовать |
+|:---------:|----------|-------------------|
+| `@BeforeAll` 🚀 | Выполняется **один раз** перед **всеми** тестами. Метод должен быть `static`. | Тяжелая инициализация (подключение к БД, загрузка настроек) |
+| `@BeforeEach` 🔄 | Выполняется **перед каждым** тестом. | Создание "свежих" объектов для изоляции тестов |
+| `@AfterEach` 🧹 | Выполняется **после каждого** теста. | "Уборка" после каждого теста (очистка файлов, сброс счетчиков) |
+| `@AfterAll` 🏁 | Выполняется **один раз** после **всех** тестов. Метод должен быть `static`. | Закрытие ресурсов (соединений с БД, файлов) |
+
+---
+
+## 💡 Пример выполнения (Образец)
+
+Рассмотрим класс `BankAccount` (Банковский счет). 🏦
+
+```java
+// Класс BankAccount (предоставляется преподавателем)
+public class BankAccount {
+    private String owner;
+    private double balance;
+
+    public BankAccount(String owner, double initialBalance) {
+        this.owner = owner;
+        this.balance = initialBalance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+    
+    public void resetBalance() {
+        this.balance = 0.0;
+    }
+}
+```
+
+**Задача:** Написать тесты для класса `BankAccount`, используя аннотации жизненного цикла, чтобы убедиться, что тесты не влияют друг на друга. ✍️
+
+**Решение:**
+
+```java
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BankAccountTest {
+
+    private BankAccount account;
+
+    @BeforeAll
+    static void initAll() {
+        System.out.println("🔧 Запуск всех тестов для BankAccount. Инициализация общих ресурсов...");
+    }
+
+    @BeforeEach
+    void setUp() {
+        // Создаем НОВЫЙ счет перед КАЖДЫМ тестом
+        account = new BankAccount("Иван Петров", 1000.0);
+        System.out.println("  ✅ Создан новый счет для теста. Баланс: 1000.0");
+    }
+
+    @AfterEach
+    void tearDown() {
+        // "Обнуляем" счет или просто логируем завершение теста
+        System.out.println("  🧹 Тест завершен. Очистка не требуется, объект будет удален сборщиком мусора.");
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        System.out.println("🏁 Все тесты BankAccount завершены. Освобождение общих ресурсов.");
+    }
+
+    @Test
+    @DisplayName("Тест: Пополнение счета увеличивает баланс 📈")
+    void testDeposit() {
+        double balanceBefore = account.getBalance();
+        account.deposit(500.0);
+        assertEquals(balanceBefore + 500.0, account.getBalance(), 0.001);
+        System.out.println("    ⚔️ Выполняется testDeposit");
+    }
+
+    @Test
+    @DisplayName("Тест: Снятие средств уменьшает баланс 📉")
+    void testWithdrawSuccess() {
+        account.withdraw(300.0);
+        assertEquals(700.0, account.getBalance(), 0.001);
+        System.out.println("    ⚔️ Выполняется testWithdrawSuccess");
+    }
+
+    @Test
+    @DisplayName("Тест: Снятие средств больше баланса невозможно 🚫")
+    void testWithdrawFail() {
+        boolean result = account.withdraw(1500.0);
+        assertFalse(result);
+        assertEquals(1000.0, account.getBalance(), "Баланс не должен измениться");
+        System.out.println("    ⚔️ Выполняется testWithdrawFail");
+    }
+}
+```
+
+**Что здесь происходит?** 🤔
+
+1.  `@BeforeAll` запускается **1 раз** в самом начале. 🚀
+2.  Перед **первым** тестом (`testDeposit`) срабатывает `@BeforeEach` и создает счет с 1000 рублей. ✅
+3.  Выполняется `testDeposit`. ⚔️
+4.  После первого теста срабатывает `@AfterEach`. 🧹
+5.  Перед **вторым** тестом (`testWithdrawSuccess`) снова срабатывает `@BeforeEach` и создает **новый** счет с 1000 рублей. 🔄
+6.  Выполняется `testWithdrawSuccess`. ⚔️
+7.  И так далее для каждого теста.
+8.  В самом конце, после всех тестов, срабатывает `@AfterAll`. 🏁
+
+✅ Это гарантирует, что каждый тест работает со своим, **"свежим"** объектом, и результат одного теста **не влияет** на другой.
+
+---
+
+## ⭐ Критерии оценки
+
+| Оценка | Условия |
+|:------:|---------|
+| **3 (удовлетворительно)** 🟢 | ✅ Выполнен и работает пример (BankAccountTest)<br>✅ Выполнено и работает **Задание 1** своего варианта<br>✅ В коде правильно используются аннотации `@BeforeEach` и `@Test`<br>✅ Тесты проходят (зеленые) |
+| **4 (хорошо)** 🔵 | ✅ Выполнены все условия на "удовлетворительно"<br>✅ Выполнено и работает **Задание 2** своего варианта<br>✅ В коде правильно используются аннотации `@BeforeEach` и, если требуется, `@AfterEach`<br>✅ Тесты написаны аккуратно, понятны названия методов (или используется `@DisplayName`) |
+| **5 (отлично)** 🔴 | ✅ Выполнены все условия на "хорошо"<br>✅ Выполнено и работает **Задание 3** своего варианта<br>✅ В коде правильно используются аннотации `@BeforeAll` и/или `@AfterAll` для работы с общей статической переменной/ресурсом<br>✅ Студент понимает разницу между `@BeforeEach` и `@BeforeAll`<br>✅ Код тестов чистый, без дублирования |
+
+---
+
+## 📤 Инструкция по сдаче
+
+### Шаг 1: Выполнение работы 💻
+1. Скачайте предоставленные классы для своего варианта.
+2. Создайте новый проект в IntelliJ IDEA.
+3. Подключите библиотеку JUnit Jupiter (если не подключена автоматически).
+4. Создайте класс с тестами согласно примеру.
+5. Выполните все три задания своего варианта.
+6. Убедитесь, что все тесты проходят успешно (зеленые ✅).
+
+### Шаг 2: Загрузка на GitHub 📦
+1. Создайте новый репозиторий на GitHub (название: `lab-junit-cycles-{Фамилия}`).
+2. Загрузите в репозиторий:
+   - Все файлы `.java` (классы и тесты)
+   - Файл `README.md` с кратким описанием работы
+3. Убедитесь, что репозиторий открыт (публичный) или добавьте преподавателя в коллабораторы.
+
+### Шаг 3: Отправка отчета через Google Форму 📝
+1. Перейдите по ссылке: [Google Форма для сдачи работ](#)
+2. Заполните поля:
+   - ФИО
+   - Номер группы
+   - Номер варианта
+   - Ссылка на GitHub репозиторий
+3. Нажмите "Отправить"
+
+---
+
+### ⏰ Срок сдачи: до 17 ноября 2025 г., 23:59
+
+### ❗ Важно:
+- Работы, сданные после срока, принимаются только по договоренности с преподавателем.
+- Проверьте ссылку на GitHub — она должна открываться без запроса доступа.
+- При обнаружении плагиата работа аннулируется без права пересдачи.
+
+---
+
+## 🎉 Удачи в выполнении работы! 🚀
+  
+  
+## 📝 Варианты заданий
+## «Тестовое окружение и жизненный цикл тестов в JUnit»
+
+---
+
+### Вариант 1
+**Тема:** Онлайн-корзина (ShoppingCart)
+**Класс:** `ShoppingCart`
+```java
+public class ShoppingCart {
+    private ArrayList<String> items;
+    
+    public ShoppingCart() {
+        items = new ArrayList<>();
+    }
+    
+    public void addItem(String item) {
+        items.add(item);
+    }
+    
+    public boolean removeItem(String item) {
+        return items.remove(item);
+    }
+    
+    public int getItemCount() {
+        return items.size();
+    }
+    
+    public void clearCart() {
+        items.clear();
+    }
+}
+```
+**Задание 1 (Простое):**
+Проверьте метод `addItem`. Используйте `@BeforeEach` для создания пустой корзины. Напишите тест, который добавляет товар "apple" и проверяет, что `getItemCount()` стал равен 1.
+
+**Задание 2 (Среднее):**
+Проверьте метод `removeItem`. Напишите два теста с использованием `@BeforeEach`, создавая корзину с товарами "apple", "banana":
+1. Удаление существующего товара "apple" (должно вернуть `true`, количество товаров уменьшиться до 1).
+2. Удаление несуществующего товара "orange" (должно вернуть `false`, количество товаров не измениться).
+
+**Задание 3 (Сложное):**
+Представьте, что магазин ведет статистику добавлений в корзину (статическая переменная `totalAdditions`). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый раз, когда вызывается метод `addItem`, счетчик должен увеличиваться на 1. С помощью `@AfterEach` проверяйте, что после каждого теста счетчик увеличился ровно на количество добавлений в этом тесте. С помощью `@AfterAll` выведите итоговое количество добавлений.
+
+---
+
+### Вариант 2
+**Тема:** Светофор (TrafficLight)
+**Класс:** `TrafficLight`
+```java
+public class TrafficLight {
+    private String currentColor;
+    private static final String[] COLORS = {"RED", "GREEN", "YELLOW"};
+    private int colorIndex;
+    
+    public TrafficLight() {
+        colorIndex = 0;
+        currentColor = COLORS[0];
+    }
+    
+    public void changeColor() {
+        colorIndex = (colorIndex + 1) % COLORS.length;
+        currentColor = COLORS[colorIndex];
+    }
+    
+    public String getCurrentColor() {
+        return currentColor;
+    }
+    
+    public boolean isRed() { return "RED".equals(currentColor); }
+    public boolean isGreen() { return "GREEN".equals(currentColor); }
+    public boolean isYellow() { return "YELLOW".equals(currentColor); }
+}
+```
+**Задание 1 (Простое):**
+Проверьте начальное состояние. Используйте `@BeforeEach` для создания светофора. Напишите тест, который проверяет, что цвет "RED" и метод `isRed()` возвращает `true`.
+
+**Задание 2 (Среднее):**
+Проверьте метод `changeColor()`. Напишите два теста с использованием `@BeforeEach`:
+1. Проверка переключения из RED в GREEN.
+2. Проверка переключения из GREEN в YELLOW (после двух вызовов `changeColor()`).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalChanges` (общее количество переключений). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `changeColor()` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте, что после каждого теста счетчик увеличился ровно на количество переключений в этом тесте. С помощью `@AfterAll` выведите общее количество переключений.
+
+---
+
+### Вариант 3
+**Тема:** Калькулятор (Calculator)
+**Класс:** `Calculator`
+```java
+public class Calculator {
+    private double lastResult;
+    
+    public double add(double a, double b) {
+        lastResult = a + b;
+        return lastResult;
+    }
+    
+    public double subtract(double a, double b) {
+        lastResult = a - b;
+        return lastResult;
+    }
+    
+    public double multiply(double a, double b) {
+        lastResult = a * b;
+        return lastResult;
+    }
+    
+    public double divide(double a, double b) {
+        if (b == 0) {
+            lastResult = Double.NaN;
+            return Double.NaN;
+        }
+        lastResult = a / b;
+        return lastResult;
+    }
+    
+    public double getLastResult() { return lastResult; }
+}
+```
+**Задание 1 (Простое):**
+Проверьте базовые операции. Используйте `@BeforeEach` для создания нового калькулятора. Напишите тест для метода `add` (2 + 3 = 5) и проверьте, что результат сохраняется в `lastResult`.
+
+**Задание 2 (Среднее):**
+Проверьте метод `divide`. Напишите два теста с использованием `@BeforeEach`:
+1. Деление 10 на 2 (результат 5, `lastResult` обновляется).
+2. Деление на 0 (возвращается `Double.NaN`, `lastResult` становится `NaN`).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `operationCount` (количество операций). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов любого метода (`add`, `subtract`, `multiply`, `divide`) должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте, что счетчик увеличился ровно на количество операций в тесте. С помощью `@AfterAll` выведите итоговое количество операций.
+
+---
+
+### Вариант 4
+**Тема:** Оценка студента (StudentGrade)
+**Класс:** `StudentGrade`
+```java
+public class StudentGrade {
+    private String studentName;
+    private ArrayList<Integer> grades;
+    
+    public StudentGrade(String name) {
+        this.studentName = name;
+        this.grades = new ArrayList<>();
+    }
+    
+    public void addGrade(int grade) {
+        if (grade >= 2 && grade <= 5) {
+            grades.add(grade);
+        }
+    }
+    
+    public double getAverageGrade() {
+        if (grades.isEmpty()) return 0;
+        int sum = 0;
+        for (int g : grades) sum += g;
+        return (double) sum / grades.size();
+    }
+    
+    public int getGradesCount() { return grades.size(); }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания студента "Иванов". Добавьте одну оценку 5 и проверьте, что средний балл стал 5.0.
+
+**Задание 2 (Среднее):**
+Проверьте метод `addGrade`. Напишите два теста с использованием `@BeforeEach`:
+1. Добавление корректной оценки 4 (количество оценок увеличивается).
+2. Добавление некорректной оценки 6 (оценка не добавляется, количество не меняется).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalGradesAdded` (всего добавленных оценок). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `addGrade` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте, что счетчик увеличился ровно на количество успешно добавленных оценок. С помощью `@AfterAll` выведите общее количество добавленных оценок.
+
+---
+
+### Вариант 5
+**Тема:** Банковский счет (BankAccount)
+**Класс:** `BankAccount`
+```java
+public class BankAccount {
+    private String owner;
+    private double balance;
+    
+    public BankAccount(String owner, double initialBalance) {
+        this.owner = owner;
+        this.balance = initialBalance;
+    }
+    
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+    
+    public boolean withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+    
+    public double getBalance() { return balance; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания счета "Петров" с балансом 1000. Проверьте, что начальный баланс равен 1000.
+
+**Задание 2 (Среднее):**
+Проверьте операции со счетом. Напишите два теста с использованием `@BeforeEach`:
+1. Пополнение на 500 (баланс должен стать 1500).
+2. Снятие 300 (успешное снятие, баланс 700).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalTransactions` (общее количество транзакций). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `deposit` или успешный `withdraw` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество транзакций.
+
+---
+
+### Вариант 6
+**Тема:** Простой стек (SimpleStack)
+**Класс:** `SimpleStack`
+```java
+public class SimpleStack {
+    private ArrayList<Integer> elements;
+    
+    public SimpleStack() {
+        elements = new ArrayList<>();
+    }
+    
+    public void push(int value) {
+        elements.add(value);
+    }
+    
+    public int pop() {
+        if (isEmpty()) throw new IllegalStateException("Stack is empty");
+        return elements.remove(elements.size() - 1);
+    }
+    
+    public boolean isEmpty() { return elements.isEmpty(); }
+    public int size() { return elements.size(); }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания пустого стека. Проверьте, что новый стек пуст (`isEmpty()` = true).
+
+**Задание 2 (Среднее):**
+Проверьте операции стека. Напишите два теста с использованием `@BeforeEach`:
+1. Добавление одного элемента (размер стека становится 1).
+2. Добавление двух элементов и извлечение одного (проверка LIFO: последний добавленный извлекается первым).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalPushes` (общее количество добавлений). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `push` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество добавлений в стек.
+
+---
+
+### Вариант 7
+**Тема:** Игровой персонаж (Player)
+**Класс:** `Player`
+```java
+public class Player {
+    private String name;
+    private int health;
+    private int maxHealth;
+    
+    public Player(String name) {
+        this.name = name;
+        this.maxHealth = 100;
+        this.health = maxHealth;
+    }
+    
+    public void takeDamage(int damage) {
+        health = Math.max(0, health - damage);
+    }
+    
+    public void heal(int amount) {
+        health = Math.min(maxHealth, health + amount);
+    }
+    
+    public boolean isAlive() { return health > 0; }
+    public int getHealth() { return health; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания персонажа "Воин". Проверьте, что после создания здоровье = 100 и персонаж жив.
+
+**Задание 2 (Среднее):**
+Проверьте получение урона и лечение. Напишите два теста с использованием `@BeforeEach`:
+1. Получение урона 30 (здоровье становится 70, персонаж жив).
+2. Получение урона 120 (здоровье становится 0, персонаж мертв).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalDamageTaken` (общий полученный урон). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `takeDamage` должен увеличивать счетчик на величину урона (но не более оставшегося здоровья). С помощью `@AfterEach` проверяйте корректность увеличения. С помощью `@AfterAll` выведите общий полученный урон.
+
+---
+
+### Вариант 8
+**Тема:** Библиотечная книга (Book)
+**Класс:** `Book`
+```java
+public class Book {
+    private String title;
+    private String author;
+    private boolean isAvailable;
+    private String borrowedBy;
+    
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+        this.isAvailable = true;
+        this.borrowedBy = null;
+    }
+    
+    public boolean borrow(String studentName) {
+        if (isAvailable) {
+            isAvailable = false;
+            borrowedBy = studentName;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean returnBook() {
+        if (!isAvailable) {
+            isAvailable = true;
+            borrowedBy = null;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isAvailable() { return isAvailable; }
+    public String getBorrowedBy() { return borrowedBy; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания книги "Война и мир". Проверьте, что книга доступна (`isAvailable()` = true).
+
+**Задание 2 (Среднее):**
+Проверьте выдачу и возврат книги. Напишите два теста с использованием `@BeforeEach`:
+1. Выдача книги студенту "Петров" (книга становится недоступна, `borrowedBy` = "Петров").
+2. Возврат книги после выдачи (книга снова доступна, `borrowedBy` = null).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalBorrowings` (общее количество выдач). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `borrow` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика только при успешной выдаче. С помощью `@AfterAll` выведите общее количество выдач книг.
+
+---
+
+### Вариант 9
+**Тема:** Список дел (ToDoList)
+**Класс:** `ToDoList`
+```java
+public class ToDoList {
+    private ArrayList<String> tasks;
+    private ArrayList<Boolean> completed;
+    
+    public ToDoList() {
+        tasks = new ArrayList<>();
+        completed = new ArrayList<>();
+    }
+    
+    public void addTask(String task) {
+        tasks.add(task);
+        completed.add(false);
+    }
+    
+    public boolean markCompleted(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            completed.set(index, true);
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isCompleted(int index) { return completed.get(index); }
+    public int getTaskCount() { return tasks.size(); }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания пустого списка дел. Добавьте задачу "Купить молоко" и проверьте, что количество задач стало 1.
+
+**Задание 2 (Среднее):**
+Проверьте отметку о выполнении. Напишите два теста с использованием `@BeforeEach` (в каждом создавайте список с задачами "Купить хлеб", "Сделать уроки"):
+1. Отметка существующей задачи как выполненной (индекс 0 — статус становится true).
+2. Отметка несуществующей задачи (индекс 5 — возвращается false, статусы не меняются).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalTasksCompleted` (всего выполненных задач). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `markCompleted` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество выполненных задач.
+
+---
+
+### Вариант 10
+**Тема:** Термометр (Thermometer)
+**Класс:** `Thermometer`
+```java
+public class Thermometer {
+    private double celsius;
+    
+    public Thermometer(double initialCelsius) {
+        this.celsius = initialCelsius;
+    }
+    
+    public void setTemperature(double celsius) {
+        this.celsius = celsius;
+    }
+    
+    public double getCelsius() { return celsius; }
+    
+    public double getFahrenheit() {
+        return celsius * 9/5 + 32;
+    }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания термометра с температурой 25°C. Проверьте, что `getCelsius()` возвращает 25.
+
+**Задание 2 (Среднее):**
+Проверьте конвертацию в Фаренгейты. Напишите два теста с использованием `@BeforeEach`:
+1. 0°C должно конвертироваться в 32°F.
+2. 100°C должно конвертироваться в 212°F.
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `temperatureChanges` (количество изменений температуры). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `setTemperature` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество изменений температуры.
+
+---
+
+### Вариант 11
+**Тема:** Лифт (Elevator)
+**Класс:** `Elevator`
+```java
+public class Elevator {
+    private int currentFloor;
+    private boolean doorsOpen;
+    private int totalFloors;
+    
+    public Elevator(int totalFloors) {
+        this.totalFloors = totalFloors;
+        this.currentFloor = 1;
+        this.doorsOpen = false;
+    }
+    
+    public void callToFloor(int floor) {
+        if (floor >= 1 && floor <= totalFloors && floor != currentFloor) {
+            currentFloor = floor;
+        }
+    }
+    
+    public void openDoors() { doorsOpen = true; }
+    public void closeDoors() { doorsOpen = false; }
+    public int getCurrentFloor() { return currentFloor; }
+    public boolean areDoorsOpen() { return doorsOpen; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания лифта на 10 этажей. Проверьте, что начальный этаж = 1, двери закрыты.
+
+**Задание 2 (Среднее):**
+Проверьте перемещение лифта. Напишите два теста с использованием `@BeforeEach`:
+1. Вызов на 5 этаж (текущий этаж становится 5).
+2. Вызов на тот же этаж (текущий этаж не меняется).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalTrips` (количество поездок). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `callToFloor` (когда этаж меняется) должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество поездок лифта.
+
+---
+
+### Вариант 12
+**Тема:** Торговый автомат (VendingMachine)
+**Класс:** `VendingMachine`
+```java
+public class VendingMachine {
+    private int colaCount;
+    private int chipsCount;
+    private double moneyCollected;
+    
+    public VendingMachine(int cola, int chips) {
+        this.colaCount = cola;
+        this.chipsCount = chips;
+        this.moneyCollected = 0;
+    }
+    
+    public boolean buyCola(double money) {
+        if (colaCount > 0 && money >= 2.0) {
+            colaCount--;
+            moneyCollected += 2.0;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean buyChips(double money) {
+        if (chipsCount > 0 && money >= 1.5) {
+            chipsCount--;
+            moneyCollected += 1.5;
+            return true;
+        }
+        return false;
+    }
+    
+    public int getColaCount() { return colaCount; }
+    public int getChipsCount() { return chipsCount; }
+    public double getMoneyCollected() { return moneyCollected; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания автомата с 5 колами и 3 чипсами. Проверьте начальные количества.
+
+**Задание 2 (Среднее):**
+Проверьте покупки. Напишите два теста с использованием `@BeforeEach`:
+1. Успешная покупка колы за 2.0 (кол становится 4, деньги собраны 2.0).
+2. Покупка чипсов при недостатке денег (1.0) — покупка не происходит.
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalSales` (общее количество продаж). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждая успешная покупка (любого товара) должна увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество продаж.
+
+---
+
+### Вариант 13
+**Тема:** Часы (Clock)
+**Класс:** `Clock`
+```java
+public class Clock {
+    private int hours;
+    private int minutes;
+    
+    public Clock(int hours, int minutes) {
+        setTime(hours, minutes);
+    }
+    
+    public void setTime(int hours, int minutes) {
+        this.hours = hours % 24;
+        this.minutes = minutes % 60;
+    }
+    
+    public void tick() {
+        minutes++;
+        if (minutes == 60) {
+            minutes = 0;
+            hours = (hours + 1) % 24;
+        }
+    }
+    
+    public String getTime() {
+        return String.format("%02d:%02d", hours, minutes);
+    }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания часов с временем 10:30. Проверьте, что `getTime()` возвращает "10:30".
+
+**Задание 2 (Среднее):**
+Проверьте метод `tick()`. Напишите два теста с использованием `@BeforeEach`:
+1. Тик с 10:30 (должно стать 10:31).
+2. Тик с 10:59 (должно стать 11:00).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalTicks` (общее количество тиков). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `tick()` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество тиков.
+
+---
+
+### Вариант 14
+**Тема:** Игральная кость (Dice)
+**Класс:** `Dice`
+```java
+public class Dice {
+    private int sides;
+    private int lastRoll;
+    private java.util.Random random;
+    
+    public Dice(int sides) {
+        this.sides = sides;
+        this.random = new java.util.Random();
+        this.lastRoll = 1;
+    }
+    
+    public int roll() {
+        lastRoll = random.nextInt(sides) + 1;
+        return lastRoll;
+    }
+    
+    public int getLastRoll() { return lastRoll; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания 6-гранной кости. Проверьте, что последний бросок инициализирован значением 1.
+
+**Задание 2 (Среднее):**
+Проверьте бросок кости. Напишите два теста с использованием `@BeforeEach`:
+1. После броска `lastRoll` обновляется.
+2. Результат броска находится в диапазоне от 1 до 6 (для 6-гранной кости).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalRolls` (общее количество бросков). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `roll()` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество бросков.
+
+---
+
+### Вариант 15
+**Тема:** Штраф за нарушение ПДД (TrafficTicket)
+**Класс:** `TrafficTicket`
+```java
+public class TrafficTicket {
+    private String driverName;
+    private int speed;
+    private int speedLimit;
+    private boolean paid;
+    
+    public TrafficTicket(String driverName, int speed, int speedLimit) {
+        this.driverName = driverName;
+        this.speed = speed;
+        this.speedLimit = speedLimit;
+        this.paid = false;
+    }
+    
+    public int calculateFine() {
+        int overspeed = speed - speedLimit;
+        if (overspeed <= 0) return 0;
+        if (overspeed < 20) return 500;
+        if (overspeed < 40) return 1500;
+        return 3000;
+    }
+    
+    public void pay() { paid = true; }
+    public boolean isPaid() { return paid; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания штрафа водителю "Иванов" (скорость 80, лимит 60). Проверьте, что штраф не оплачен.
+
+**Задание 2 (Среднее):**
+Проверьте расчет штрафа. Напишите два теста с использованием `@BeforeEach`:
+1. Превышение на 15 км/ч (штраф 500).
+2. Превышение на 25 км/ч (штраф 1500).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalFinesIssued` (общее количество выписанных штрафов). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый созданный объект `TrafficTicket` должен увеличивать счетчик на 1 в конструкторе. С помощью `@AfterEach` проверяйте, что счетчик увеличивается при создании. С помощью `@AfterAll` выведите общее количество штрафов.
+
+---
+
+### Вариант 16
+**Тема:** Онлайн-заказ (OnlineOrder)
+**Класс:** `OnlineOrder`
+```java
+public class OnlineOrder {
+    private String customer;
+    private ArrayList<String> items;
+    private boolean delivered;
+    
+    public OnlineOrder(String customer) {
+        this.customer = customer;
+        this.items = new ArrayList<>();
+        this.delivered = false;
+    }
+    
+    public void addItem(String item) {
+        items.add(item);
+    }
+    
+    public boolean removeItem(String item) {
+        return items.remove(item);
+    }
+    
+    public void markDelivered() {
+        delivered = true;
+    }
+    
+    public int getItemCount() { return items.size(); }
+    public boolean isDelivered() { return delivered; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания заказа клиента "Петров". Проверьте, что заказ пуст и не доставлен.
+
+**Задание 2 (Среднее):**
+Проверьте управление заказом. Напишите два теста с использованием `@BeforeEach`:
+1. Добавление товара "Телефон" (количество товаров становится 1).
+2. Отметка о доставке (статус доставки становится true).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalOrders` (общее количество заказов). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый созданный объект `OnlineOrder` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество заказов.
+
+---
+
+### Вариант 17
+**Тема:** Склад (Warehouse)
+**Класс:** `Warehouse`
+```java
+public class Warehouse {
+    private String productName;
+    private int quantity;
+    
+    public Warehouse(String productName, int initialQuantity) {
+        this.productName = productName;
+        this.quantity = initialQuantity;
+    }
+    
+    public boolean addStock(int amount) {
+        if (amount > 0) {
+            quantity += amount;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean removeStock(int amount) {
+        if (amount > 0 && quantity >= amount) {
+            quantity -= amount;
+            return true;
+        }
+        return false;
+    }
+    
+    public int getQuantity() { return quantity; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания склада с товаром "Ноутбуки", количество 10. Проверьте начальное количество.
+
+**Задание 2 (Среднее):**
+Проверьте операции со складом. Напишите два теста с использованием `@BeforeEach`:
+1. Добавление 5 ноутбуков (количество становится 15).
+2. Списание 3 ноутбуков (количество становится 7).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalOperations` (общее количество операций на складе). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `addStock` или `removeStock` должен увеличивать счетчик на 1 (независимо от успеха). С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество операций.
+
+---
+
+### Вариант 18
+**Тема:** Чат-комната (ChatRoom)
+**Класс:** `ChatRoom`
+```java
+public class ChatRoom {
+    private String roomName;
+    private ArrayList<String> participants;
+    private ArrayList<String> messages;
+    
+    public ChatRoom(String roomName) {
+        this.roomName = roomName;
+        this.participants = new ArrayList<>();
+        this.messages = new ArrayList<>();
+    }
+    
+    public void join(String userName) {
+        if (!participants.contains(userName)) {
+            participants.add(userName);
+        }
+    }
+    
+    public void leave(String userName) {
+        participants.remove(userName);
+    }
+    
+    public void sendMessage(String userName, String message) {
+        if (participants.contains(userName)) {
+            messages.add(userName + ": " + message);
+        }
+    }
+    
+    public int getParticipantCount() { return participants.size(); }
+    public int getMessageCount() { return messages.size(); }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания чата "Общий". Проверьте, что нет участников и сообщений.
+
+**Задание 2 (Среднее):**
+Проверьте управление участниками. Напишите два теста с использованием `@BeforeEach`:
+1. Присоединение пользователя "Анна" (количество участников становится 1).
+2. Выход пользователя (участник удаляется).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalMessages` (общее количество сообщений во всех чатах). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждое отправленное сообщение (успешный вызов `sendMessage`) должно увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество сообщений.
+
+---
+
+### Вариант 19
+**Тема:** Автомобиль (Car)
+**Класс:** `Car`
+```java
+public class Car {
+    private String model;
+    private double fuelLevel;
+    private double mileage;
+    
+    public Car(String model, double initialFuel) {
+        this.model = model;
+        this.fuelLevel = initialFuel;
+        this.mileage = 0;
+    }
+    
+    public boolean drive(double distance) {
+        double fuelNeeded = distance / 10; // расход 10 км/литр
+        if (fuelLevel >= fuelNeeded) {
+            fuelLevel -= fuelNeeded;
+            mileage += distance;
+            return true;
+        }
+        return false;
+    }
+    
+    public void refuel(double amount) {
+        if (amount > 0) {
+            fuelLevel += amount;
+        }
+    }
+    
+    public double getFuelLevel() { return fuelLevel; }
+    public double getMileage() { return mileage; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания автомобиля "Toyota" с 50 литрами бензина. Проверьте начальный уровень топлива.
+
+**Задание 2 (Среднее):**
+Проверьте поездки. Напишите два теста с использованием `@BeforeEach`:
+1. Поездка 50 км (топлива должно уменьшиться на 5 литров, пробег увеличиться на 50).
+2. Поездка 600 км (невозможно из-за нехватки топлива, возвращается false).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalTrips` (общее количество успешных поездок). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждая успешная поездка (`drive` вернул true) должна увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество поездок.
+
+---
+
+### Вариант 20
+**Тема:** Геометрическая фигура (Circle)
+**Класс:** `Circle`
+```java
+public class Circle {
+    private double radius;
+    
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+    
+    public void setRadius(double radius) {
+        if (radius > 0) {
+            this.radius = radius;
+        }
+    }
+    
+    public double getArea() {
+        return Math.PI * radius * radius;
+    }
+    
+    public double getCircumference() {
+        return 2 * Math.PI * radius;
+    }
+    
+    public double getRadius() { return radius; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания круга с радиусом 5. Проверьте, что радиус равен 5.
+
+**Задание 2 (Среднее):**
+Проверьте вычисления. Напишите два теста с использованием `@BeforeEach`:
+1. Площадь круга с радиусом 5 (должна быть ~78.54).
+2. Длина окружности с радиусом 5 (должна быть ~31.42).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `circlesCreated` (количество созданных кругов). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый созданный объект `Circle` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество созданных кругов.
+
+---
+
+### Вариант 21
+**Тема:** Учетная запись пользователя (UserAccount)
+**Класс:** `UserAccount`
+```java
+public class UserAccount {
+    private String username;
+    private String password;
+    private boolean isActive;
+    private int loginAttempts;
+    
+    public UserAccount(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.isActive = true;
+        this.loginAttempts = 0;
+    }
+    
+    public boolean login(String enteredPassword) {
+        if (!isActive) return false;
+        if (password.equals(enteredPassword)) {
+            loginAttempts = 0;
+            return true;
+        } else {
+            loginAttempts++;
+            if (loginAttempts >= 3) {
+                isActive = false;
+            }
+            return false;
+        }
+    }
+    
+    public void deactivate() { isActive = false; }
+    public boolean isActive() { return isActive; }
+    public int getLoginAttempts() { return loginAttempts; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания пользователя "ivan" с паролем "123". Проверьте, что учетная запись активна.
+
+**Задание 2 (Среднее):**
+Проверьте вход в систему. Напишите два теста с использованием `@BeforeEach`:
+1. Успешный вход с правильным паролем (возвращает true).
+2. Неуспешный вход с неправильным паролем (возвращает false, попытки увеличиваются).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalLogins` (общее количество успешных входов). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `login` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество успешных входов.
+
+---
+
+### Вариант 22
+**Тема:** Простой счетчик (SimpleCounter)
+**Класс:** `SimpleCounter`
+```java
+public class SimpleCounter {
+    private int count;
+    private int step;
+    
+    public SimpleCounter(int initialValue, int step) {
+        this.count = initialValue;
+        this.step = step;
+    }
+    
+    public void increment() {
+        count += step;
+    }
+    
+    public void decrement() {
+        count -= step;
+    }
+    
+    public void reset() {
+        count = 0;
+    }
+    
+    public int getCount() { return count; }
+    public void setStep(int step) { this.step = step; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания счетчика с начальным значением 10 и шагом 2. Проверьте начальное значение.
+
+**Задание 2 (Среднее):**
+Проверьте операции счетчика. Напишите два теста с использованием `@BeforeEach`:
+1. Инкремент (значение становится 12).
+2. Декремент (значение становится 8).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalChanges` (общее количество изменений счетчика). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `increment` или `decrement` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество изменений.
+
+---
+
+### Вариант 23
+**Тема:** Игра "Угадай число" (GuessTheNumber)
+**Класс:** `GuessTheNumber`
+```java
+public class GuessTheNumber {
+    private int secretNumber;
+    private int attempts;
+    private boolean gameOver;
+    
+    public GuessTheNumber(int secretNumber) {
+        this.secretNumber = secretNumber;
+        this.attempts = 0;
+        this.gameOver = false;
+    }
+    
+    public String guess(int number) {
+        if (gameOver) return "Игра окончена";
+        attempts++;
+        if (number == secretNumber) {
+            gameOver = true;
+            return "Правильно!";
+        } else if (number < secretNumber) {
+            return "Больше";
+        } else {
+            return "Меньше";
+        }
+    }
+    
+    public int getAttempts() { return attempts; }
+    public boolean isGameOver() { return gameOver; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания игры с загаданным числом 42. Проверьте, что игра не окончена и попыток 0.
+
+**Задание 2 (Среднее):**
+Проверьте механизм угадывания. Напишите два теста с использованием `@BeforeEach`:
+1. Слишком маленькое число (30) — возвращается "Больше".
+2. Правильное число (42) — возвращается "Правильно!", игра завершается.
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalGames` (общее количество сыгранных игр). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый созданный объект `GuessTheNumber` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество игр.
+
+---
+
+### Вариант 24
+**Тема:** Валидатор пароля (PasswordValidator)
+**Класс:** `PasswordValidator`
+```java
+public class PasswordValidator {
+    private int minLength;
+    private boolean requireDigit;
+    
+    public PasswordValidator(int minLength, boolean requireDigit) {
+        this.minLength = minLength;
+        this.requireDigit = requireDigit;
+    }
+    
+    public boolean validate(String password) {
+        if (password == null || password.length() < minLength) {
+            return false;
+        }
+        
+        if (requireDigit) {
+            boolean hasDigit = false;
+            for (char c : password.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    hasDigit = true;
+                    break;
+                }
+            }
+            if (!hasDigit) return false;
+        }
+        
+        return true;
+    }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания валидатора с minLength=8 и requireDigit=true. Проверьте, что объект создан.
+
+**Задание 2 (Среднее):**
+Проверьте валидацию паролей. Напишите два теста с использованием `@BeforeEach`:
+1. Корректный пароль "pass1234" (длина 8, есть цифра) — возвращает true.
+2. Слишком короткий пароль "pass" (длина 4) — возвращает false.
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalValidations` (общее количество проверок). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `validate` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество проверок.
+
+---
+
+### Вариант 25
+**Тема:** Электронное письмо (EmailMessage)
+**Класс:** `EmailMessage`
+```java
+public class EmailMessage {
+    private String sender;
+    private String recipient;
+    private String subject;
+    private String body;
+    private boolean sent;
+    
+    public EmailMessage(String sender, String recipient) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.subject = "";
+        this.body = "";
+        this.sent = false;
+    }
+    
+    public void setSubject(String subject) { this.subject = subject; }
+    public void setBody(String body) { this.body = body; }
+    
+    public boolean send() {
+        if (!sender.isEmpty() && !recipient.isEmpty()) {
+            sent = true;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isSent() { return sent; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания письма от "ivan@mail.ru" кому "petr@mail.ru". Проверьте, что письмо не отправлено.
+
+**Задание 2 (Среднее):**
+Проверьте отправку письма. Напишите два теста с использованием `@BeforeEach`:
+1. Отправка заполненного письма (возвращает true, sent становится true).
+2. Попытка отправить письмо с пустым отправителем (возвращает false).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalEmailsSent` (общее количество отправленных писем). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `send` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество отправленных писем.
+
+---
+
+### Вариант 26
+**Тема:** Парковка (ParkingLot)
+**Класс:** `ParkingLot`
+```java
+public class ParkingLot {
+    private int totalSpaces;
+    private int occupiedSpaces;
+    private double hourlyRate;
+    
+    public ParkingLot(int totalSpaces, double hourlyRate) {
+        this.totalSpaces = totalSpaces;
+        this.hourlyRate = hourlyRate;
+        this.occupiedSpaces = 0;
+    }
+    
+    public boolean parkCar() {
+        if (occupiedSpaces < totalSpaces) {
+            occupiedSpaces++;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean leaveCar() {
+        if (occupiedSpaces > 0) {
+            occupiedSpaces--;
+            return true;
+        }
+        return false;
+    }
+    
+    public double calculatePayment(int hours) {
+        return hours * hourlyRate;
+    }
+    
+    public int getAvailableSpaces() { return totalSpaces - occupiedSpaces; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания парковки на 50 мест. Проверьте, что свободно 50 мест.
+
+**Задание 2 (Среднее):**
+Проверьте въезд и выезд. Напишите два теста с использованием `@BeforeEach`:
+1. Парковка одной машины (свободных мест становится 49).
+2. Расчет оплаты за 3 часа при тарифе 100 руб/час (должно быть 300).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalCarsParked` (общее количество припаркованных машин). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `parkCar` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество припаркованных машин.
+
+---
+
+### Вариант 27
+**Тема:** Бронирование билетов в кино (Cinema)
+**Класс:** `Cinema`
+```java
+public class Cinema {
+    private String movieTitle;
+    private int totalSeats;
+    private boolean[] seats;
+    
+    public Cinema(String movieTitle, int totalSeats) {
+        this.movieTitle = movieTitle;
+        this.totalSeats = totalSeats;
+        this.seats = new boolean[totalSeats];
+    }
+    
+    public boolean bookSeat(int seatNumber) {
+        if (seatNumber >= 0 && seatNumber < totalSeats && !seats[seatNumber]) {
+            seats[seatNumber] = true;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean cancelBooking(int seatNumber) {
+        if (seatNumber >= 0 && seatNumber < totalSeats && seats[seatNumber]) {
+            seats[seatNumber] = false;
+            return true;
+        }
+        return false;
+    }
+    
+    public int getAvailableSeats() {
+        int count = 0;
+        for (boolean seat : seats) {
+            if (!seat) count++;
+        }
+        return count;
+    }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания кинотеатра на 100 мест. Проверьте, что доступно 100 мест.
+
+**Задание 2 (Среднее):**
+Проверьте бронирование. Напишите два теста с использованием `@BeforeEach`:
+1. Бронирование места 5 (успешно, доступных мест становится 99).
+2. Бронирование уже занятого места (возвращает false).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalBookings` (общее количество бронирований). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `bookSeat` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество бронирований.
+
+---
+
+### Вариант 28
+**Тема:** Зоопарк (Zoo)
+**Класс:** `Zoo`
+```java
+public class Zoo {
+    private ArrayList<String> animals;
+    private int capacity;
+    
+    public Zoo(int capacity) {
+        this.capacity = capacity;
+        this.animals = new ArrayList<>();
+    }
+    
+    public boolean addAnimal(String animal) {
+        if (animals.size() < capacity) {
+            animals.add(animal);
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean removeAnimal(String animal) {
+        return animals.remove(animal);
+    }
+    
+    public boolean hasAnimal(String animal) {
+        return animals.contains(animal);
+    }
+    
+    public int getAnimalCount() { return animals.size(); }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания зоопарка вместимостью 10. Проверьте, что животных нет.
+
+**Задание 2 (Среднее):**
+Проверьте добавление животных. Напишите два теста с использованием `@BeforeEach`:
+1. Добавление льва (успешно, количество животных становится 1).
+2. Удаление несуществующего животного (возвращает false).
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalAnimalsAdded` (общее количество добавленных животных). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый успешный вызов `addAnimal` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество добавленных животных.
+
+---
+
+### Вариант 29
+**Тема:** Очередь в больнице (HospitalQueue)
+**Класс:** `HospitalQueue`
+```java
+public class HospitalQueue {
+    private LinkedList<String> queue;
+    private int maxLength;
+    private static int totalPatients = 0;
+    
+    public HospitalQueue(int maxLength) {
+        this.maxLength = maxLength;
+        this.queue = new LinkedList<>();
+    }
+    
+    public boolean addPatient(String patient) {
+        if (queue.size() < maxLength) {
+            queue.add(patient);
+            totalPatients++;
+            return true;
+        }
+        return false;
+    }
+    
+    public String serveNextPatient() {
+        if (!queue.isEmpty()) {
+            return queue.removeFirst();
+        }
+        return null;
+    }
+    
+    public int getQueueLength() { return queue.size(); }
+    public static int getTotalPatients() { return totalPatients; }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания очереди на 5 человек. Проверьте, что очередь пуста.
+
+**Задание 2 (Среднее):**
+Проверьте работу с очередью. Напишите два теста с использованием `@BeforeEach`:
+1. Добавление пациента "Иванов" (длина очереди становится 1).
+2. Обслуживание пациента из очереди (возвращает имя пациента, очередь уменьшается).
+
+**Задание 3 (Сложное):**
+Управляйте статическим счетчиком `totalPatients`. С помощью `@BeforeAll` сбросьте счетчик = 0. Каждый успешный вызов `addPatient` должен увеличивать счетчик. С помощью `@AfterEach` проверяйте увеличение. С помощью `@AfterAll` выведите общее количество пациентов.
+
+---
+
+### Вариант 30
+**Тема:** Плейлист (MusicPlaylist)
+**Класс:** `MusicPlaylist`
+```java
+public class MusicPlaylist {
+    private ArrayList<String> songs;
+    private int currentIndex;
+    private boolean isPlaying;
+    
+    public MusicPlaylist() {
+        this.songs = new ArrayList<>();
+        this.currentIndex = -1;
+        this.isPlaying = false;
+    }
+    
+    public void addSong(String song) {
+        songs.add(song);
+    }
+    
+    public boolean removeSong(String song) {
+        return songs.remove(song);
+    }
+    
+    public void play() {
+        if (!songs.isEmpty() && currentIndex == -1) {
+            currentIndex = 0;
+        }
+        isPlaying = true;
+    }
+    
+    public void next() {
+        if (!songs.isEmpty() && currentIndex < songs.size() - 1) {
+            currentIndex++;
+        }
+    }
+    
+    public String getCurrentSong() {
+        if (currentIndex >= 0 && currentIndex < songs.size()) {
+            return songs.get(currentIndex);
+        }
+        return null;
+    }
+    
+    public boolean isPlaying() { return isPlaying; }
+    public int getSongCount() { return songs.size(); }
+}
+```
+**Задание 1 (Простое):**
+Используйте `@BeforeEach` для создания пустого плейлиста. Проверьте, что плейлист пуст и не играет.
+
+**Задание 2 (Среднее):**
+Проверьте добавление и воспроизведение. Напишите два теста с использованием `@BeforeEach` (добавьте песню "Song1"):
+1. Добавление песни (количество песен становится 1).
+2. Воспроизведение плейлиста (isPlaying = true, текущая песня = "Song1").
+
+**Задание 3 (Сложное):**
+Введите статический счетчик `totalSongsAdded` (общее количество добавленных песен). С помощью `@BeforeAll` инициализируйте счетчик = 0. Каждый вызов `addSong` должен увеличивать счетчик на 1. С помощью `@AfterEach` проверяйте увеличение счетчика. С помощью `@AfterAll` выведите общее количество добавленных песен.
+
