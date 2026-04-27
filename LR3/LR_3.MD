@@ -382,8 +382,8 @@ public class CalculatorTest {
 2. В индивидуальном отчёте должны быть указаны цель, [задание](LAB3_Variants.docx), номер варианта(ваш порядковый номер
    в списке группы в
    журнале на моем
-   сайте [235 группа](https://docs.google.com/spreadsheets/d/186VmfxhiyN9vD0eqQtgej3up6OricDa0/edit?gid=2072898038#gid=2072898038),
-   [237 группа](https://docs.google.com/spreadsheets/d/1HBRhJ0W6VezDNjnPWNHxUv7krdP6HPgP/edit?gid=1461174089#gid=1461174089)),
+   сайте [245 группа](https://forms.gle/4LdKLaz9kANnwC246),
+   [247 группа](https://forms.gle/rNj5QSh98azC9sMs8)),
    представлены необходимый программный код и пояснения к ним.
 
 ***Критерии оценивания***
@@ -395,8 +395,8 @@ public class CalculatorTest {
       100%.
     * Создать позитивные и негативные тест-кейсы(если это возможно) и оформить их по образцу в индивидуальном отчёте.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР3](LR3_Report.docx) и ответить на вопросы.
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/oKJjL1dFcH6adcuJA)
-      или [237 группа](https://forms.gle/gdCpunJbQnmcQWVF9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/4LdKLaz9kANnwC246)
+      или [247 группа](https://forms.gle/rNj5QSh98azC9sMs8)
 
 * Оценка 4
     * Законспектировать теоритический материал
@@ -405,8 +405,8 @@ public class CalculatorTest {
       100%.
     * Создать позитивные и негативные тест-кейсы(если это возможно) и оформить их по образцу в индивидуальном отчёте.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР3](LR3_Report.docx) и ответить на вопросы.
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/oKJjL1dFcH6adcuJA)
-      или [237 группа](https://forms.gle/gdCpunJbQnmcQWVF9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/4LdKLaz9kANnwC246)
+      или [247 группа](https://forms.gle/rNj5QSh98azC9sMs8)
 
 * Оценка 3
     * Законспектировать теоритический материал
@@ -415,8 +415,8 @@ public class CalculatorTest {
       100%.
     * Создать позитивные и негативные тест-кейсы(если это возможно) и оформить их по образцу в индивидуальном отчёте.
     * Оформить индивидуальный отчет [ШАБЛОН ДЛЯ ОТЧЕТА ПО ЛР3](LR3_Report.docx) и ответить на вопросы.
-    * загрузить все в гугл форму:[235 группа](https://forms.gle/oKJjL1dFcH6adcuJA)
-      или [237 группа](https://forms.gle/gdCpunJbQnmcQWVF9)
+    * загрузить все в гугл форму:[245 группа](https://forms.gle/4LdKLaz9kANnwC246)
+      или [247 группа](https://forms.gle/rNj5QSh98azC9sMs8)
 
 </details>
 
