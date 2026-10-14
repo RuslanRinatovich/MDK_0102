@@ -130,9 +130,9 @@
 
 ### 📌 Мем-ситуация:
 
-<img src="1.jpg" alt="Схема отладки" width="600">
+<img src="1.jpg" alt="Схема отладки" style="max-width: 100%; height: auto;">
 
-<img src="2.jpg" alt="Схема отладки" width="600">
+<img src="2.jpg" alt="Схема отладки" style="max-width: 100%; height: auto;">
 
 **Обсуждение:** Знакома ли вам такая ситуация? Почему так происходит?
 
